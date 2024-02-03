@@ -11,6 +11,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
+import donate from "./donate.png"
 
 function Donate() {
   const formatDate = (dateString) => {
@@ -253,7 +254,7 @@ function Donate() {
           </Button>
         </div>
       ) : (
-        ''
+        <img src={donate} alt='donate-camp'/>
       )}
       <div
         className='modal show p-4'
