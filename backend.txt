@@ -1,0 +1,147 @@
+Software -  
+            1. VS Code (Development): https://code.visualstudio.com/download
+            2. PostgreSQL (Database): https://www.postgresql.org/download/
+            3. Node JS (Server): https://nodejs.org/en/download
+            (Refer YT videos for installation if any issues)
+
+Initial SetUp: Extract the zip file and open the folder (NGO) in VS Code Editor
+
+Folder Structure:
+            > backend
+            > frontend
+            .env
+            .gitignore
+            npm.txt
+            package-lock.json
+            package.json
+
+Step 1: Open terminal in VS Code Ctrl + ~ (Windows)
+        > cd frontend
+
+        Execute cmd entering the directory in terminal (to install dependencies)
+        > npm install
+
+Step 2: Move back to the (NGO) folder
+        > cd ..
+
+Step 3: Open terminal in VS Code Ctrl + ~ (Windows)
+        > cd backend
+
+        Execute cmd entering the directory in terminal (to install dependencies)
+        > npm install
+
+        *This generates a node_modules folder
+
+Step 4: Configure the details in .env file
+
+        JWT_KEY --> Can be any secret string
+        SECRET --> Can be any secret string
+        DB_HOST --> host details
+        DB_USER --> PostgreSQL username
+        DB_PASSWORD --> PostgreSQL password
+        PORT --> Server running on port
+
+
+Step 5: Open PostgreSQL query run on (psql) terminal
+
+\l                              -> to check all the databases
+\c {database name}              -> to go to a particular database
+\d                              -> to see tables in that database
+select * from "{table name}"    -> to see table details
+
+*Query 1
+CREATE DATABASE ngo;
+
+*Query 2
+CREATE TABLE "user"(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
+    mobile_no NUMERIC(10) UNIQUE,
+    is_admin BOOLEAN DEFAULT false,
+    address VARCHAR(255),
+    pin NUMERIC(6),
+    state VARCHAR(50),
+    dob DATE,
+    blood_group VARCHAR(5),
+    verified BOOLEAN DEFAULT false
+);
+
+*Query 3
+CREATE TABLE "camp"(
+    id SERIAL PRIMARY KEY,
+    camp_name VARCHAR(255),
+    date DATE,
+    time TIME,
+    address VARCHAR(255),
+    state VARCHAR(50),
+    pin VARCHAR(6)
+);
+
+*Query 4
+CREATE TABLE "donor"(
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES "user" (id),
+    camp_id INTEGER REFERENCES "camp" (id),
+    donor_name VARCHAR(255),
+    mobile_no NUMERIC(10),
+    blood_group VARCHAR(5),
+    previous_donation_date DATE,
+    approval BOOLEAN DEFAULT false
+);
+
+*Query 5
+CREATE TABLE "request"(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    dob DATE,
+    mobile_no NUMERIC(10),
+    address VARCHAR(255),
+    state VARCHAR(255),
+    pin VARCHAR(10),
+    blood_group VARCHAR(5),
+    approval BOOLEAN DEFAULT false,
+    comment TEXT [],
+    user_id INTEGER REFERENCES "user" (id)
+);
+
+*This generates a new Database named ngo and 4 tables (user, donor, camp, request)
+
+Step 6: Open > backend/db.js
+
+const pool = new Pool({
+  user: 'postgres', <--- Change it with your username
+  password: 'chaitya', <--- Change it with your password
+  host: 'localhost',
+  port: 5432,
+  database: 'ngo',
+});
+
+Step 7: Refer npm.txt to run the project
+
+
+----------------- To Register as ADMIN ----------------------
+
+Step 1: Go to > frontend/src/screen/Register.js
+
+In here,
+const [inputs, setInputs] = useState({
+    name: '',
+    email: '',
+    password: '',
+    mobile_no: '',
+    is_admin: false, <--- Change this to true
+    address: '',
+    pin: '',
+    state: '',
+    dob: '',
+    blood_group: '',
+  });
+
+  And then on website register user to create as ADMIN
+
+  * Then again change this to is_admin: false in Register.js file
+
+  
